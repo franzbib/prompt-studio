@@ -5,6 +5,7 @@ export const b1Prompts = [
   // ═══════════════════════════════════════════════
   {
     id: 'b1_gram_01',
+    titleZh: '未完成过去时与复合过去时：叙事练习',
     title: 'Imparfait vs Passé composé — récits',
     level: 'B1',
     skill: 'grammaire',
@@ -41,6 +42,7 @@ Thème du récit : [THÈME_RÉCIT]`,
   },
   {
     id: 'b1_gram_02',
+    titleZh: '现在虚拟式入门',
     title: 'Introduction au subjonctif présent',
     level: 'B1',
     skill: 'grammaire',
@@ -75,6 +77,7 @@ Thème du récit : [THÈME_RÉCIT]`,
   },
   {
     id: 'b1_ecrit_01',
+    titleZh: '表达观点：短篇议论文',
     title: 'Donner son opinion — texte argumenté court',
     level: 'B1',
     skill: 'production_ecrite',
@@ -109,6 +112,7 @@ Thème du récit : [THÈME_RÉCIT]`,
   },
   {
     id: 'b1_vocab_01',
+    titleZh: '表达怀疑、确定与可能性',
     title: 'Exprimer le doute, la certitude, la probabilité',
     level: 'B1',
     skill: 'vocabulaire',
@@ -142,6 +146,7 @@ Thème du récit : [THÈME_RÉCIT]`,
   },
   {
     id: 'b1_socrat_01',
+    titleZh: '苏格拉底式辅导：不直接给答案的纠错',
     title: 'Tuteur socratique — corriger sans donner la réponse',
     level: 'B1',
     skill: 'grammaire',
@@ -178,6 +183,7 @@ Procède ainsi :
   },
   {
     id: 'b1_methodo_01',
+    titleZh: '准备一段简短口头展示',
     title: 'Préparer une présentation orale courte',
     level: 'B1',
     skill: 'methodologie',

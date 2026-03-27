@@ -80,6 +80,10 @@ export const RICH_PROMPT_FIELDS = [
   "multiLevel",
 ];
 
+export const OPTIONAL_LOCALIZED_PROMPT_FIELDS = [
+  "titleZh",
+];
+
 export const RICH_PROMPT_DEFAULTS = {
   cefrActivityPrimary: "production_ecrite",
   pedagogicalFunction: "entrainement_guide",
@@ -118,4 +122,8 @@ export function isKnownRichPromptValue(field, value) {
 
   const allowedValues = RICH_PROMPT_ENUM_SETS[field];
   return allowedValues ? allowedValues.has(value) : false;
+}
+
+export function isKnownOptionalLocalizedPromptField(field) {
+  return OPTIONAL_LOCALIZED_PROMPT_FIELDS.includes(field);
 }

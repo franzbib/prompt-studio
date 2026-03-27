@@ -1,5 +1,9 @@
 import { LEVELS } from "./meta.js";
-import { RICH_PROMPT_ENUM_SETS, RICH_PROMPT_FIELDS } from "./schema.js";
+import {
+  OPTIONAL_LOCALIZED_PROMPT_FIELDS,
+  RICH_PROMPT_ENUM_SETS,
+  RICH_PROMPT_FIELDS,
+} from "./schema.js";
 
 const allowedLevels = new Set(LEVELS);
 
@@ -65,6 +69,18 @@ function validateRichFields(prompt) {
   });
 }
 
+function validateOptionalLocalizedFields(prompt) {
+  OPTIONAL_LOCALIZED_PROMPT_FIELDS.forEach((field) => {
+    if (!(field in prompt) || prompt[field] == null) {
+      return;
+    }
+
+    if (typeof prompt[field] !== "string" || prompt[field].trim().length === 0) {
+      warn(`Optional localized field "${field}" must be a non-empty string on prompt "${prompt.id}"`, prompt);
+    }
+  });
+}
+
 function validateRichCoherence(prompt) {
   if (!allowedLevels.has(prompt.level)) {
     return;
@@ -98,6 +114,7 @@ function validateRichCoherence(prompt) {
 export function validateRichPromptCatalog({ prompts }) {
   prompts.forEach((prompt) => {
     validateRichFields(prompt);
+    validateOptionalLocalizedFields(prompt);
     validateRichCoherence(prompt);
   });
 }

@@ -98,6 +98,9 @@ export function PromptCard({
         </div>
 
         <h3 className="font-semibold text-slate-800 text-sm leading-tight mb-1">{prompt.title}</h3>
+        {showChineseLabels && prompt.titleZh && (
+          <p className="text-[11px] text-slate-400 mb-1 leading-snug">{prompt.titleZh}</p>
+        )}
         {showChineseLabels && (
           <p className="text-[11px] text-slate-400 mb-1">Objectif d'apprentissage · 学习目标</p>
         )}

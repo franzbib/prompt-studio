@@ -5,6 +5,7 @@ export const b2Prompts = [
   // ═══════════════════════════════════════════════
   {
     id: 'b2_ecrit_01',
+    titleZh: '修改一段文字，但不整段重写',
     title: 'Corriger un paragraphe sans tout réécrire',
     level: 'B2',
     skill: 'production_ecrite',
@@ -42,6 +43,7 @@ Format de ta réponse :
   },
   {
     id: 'b2_ecrit_02',
+    titleZh: '有层次地写议论文：正反论证与综合',
     title: 'Argumentation nuancée — thèse, antithèse, synthèse',
     level: 'B2',
     skill: 'production_ecrite',
@@ -75,6 +77,7 @@ Format de ta réponse :
   },
   {
     id: 'b2_comp_01',
+    titleZh: '综合两篇观点相反的材料',
     title: 'Synthèse de deux sources contradictoires',
     level: 'B2',
     skill: 'comprehension_ecrite',
@@ -111,6 +114,7 @@ Ensuite :
   },
   {
     id: 'b2_gram_01',
+    titleZh: '虚拟式与条件式：假设与语气细化',
     title: 'Subjonctif et conditionnel — hypothèse et nuance',
     level: 'B2',
     skill: 'grammaire',
@@ -144,6 +148,7 @@ Ensuite :
   },
   {
     id: 'b2_vocab_01',
+    titleZh: '高级连接词与正式表达',
     title: 'Connecteurs avancés et registre soutenu',
     level: 'B2',
     skill: 'vocabulaire',
@@ -176,6 +181,7 @@ Ensuite :
   },
   {
     id: 'b2_methodo_01',
+    titleZh: '法国大学申请动机信',
     title: 'Lettre de motivation — université française',
     level: 'B2',
     skill: 'production_ecrite',
@@ -209,6 +215,7 @@ Ensuite :
   },
   {
     id: 'b2_exam_01',
+    titleZh: 'DELF B2 写作模拟',
     title: 'Simulation DELF B2 — production écrite',
     level: 'B2',
     skill: 'production_ecrite',

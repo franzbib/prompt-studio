@@ -196,8 +196,14 @@ function inferMultiLevel(prompt) {
 }
 
 export function normalizePrompt(rawPrompt) {
+  const normalizedTitleZh =
+    typeof rawPrompt.titleZh === "string" && rawPrompt.titleZh.trim().length > 0
+      ? rawPrompt.titleZh.trim()
+      : undefined;
+
   const prompt = {
     ...rawPrompt,
+    titleZh: normalizedTitleZh,
     tags: Array.isArray(rawPrompt.tags) ? rawPrompt.tags : [],
     placeholders: Array.isArray(rawPrompt.placeholders) ? rawPrompt.placeholders : [],
     aiToolCompatibility:

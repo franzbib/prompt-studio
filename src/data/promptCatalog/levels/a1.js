@@ -5,6 +5,7 @@ export const a1Prompts = [
   // ═══════════════════════════════════════════════
   {
     id: 'a1_gram_01',
+    titleZh: '用 être 和 avoir 做自我介绍',
     title: 'Se présenter avec le verbe être et avoir',
     level: 'A1',
     skill: 'grammaire',
@@ -39,6 +40,7 @@ Mon contexte : je veux parler de [INFORMATIONS_PERSONNELLES].`,
   },
   {
     id: 'a1_vocab_01',
+    titleZh: '教室词汇卡片',
     title: 'Cartes lexicales : la salle de classe',
     level: 'A1',
     skill: 'vocabulaire',
@@ -75,6 +77,7 @@ Ensuite, propose un mini-test de 5 questions pour vérifier la mémorisation.`,
   },
   {
     id: 'a1_ecrit_01',
+    titleZh: '写一张简单明信片',
     title: 'Écrire une carte postale simple',
     level: 'A1',
     skill: 'production_ecrite',
@@ -109,6 +112,7 @@ Procède ainsi :
   },
   {
     id: 'a1_oral_01',
+    titleZh: '口头自我介绍模拟',
     title: 'Se présenter à l\'oral — simulation',
     level: 'A1',
     skill: 'expression_orale',
@@ -144,6 +148,7 @@ Parle lentement et simplement. Si je ne comprends pas, reformule en [LANGUE_AIDE
   },
   {
     id: 'a1_surv_01',
+    titleZh: '生存法语：求助、急救与问路',
     title: 'Français de survie — urgences et directions',
     level: 'A1',
     skill: 'vie_quotidienne',

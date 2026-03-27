@@ -5,6 +5,7 @@ export const transversalPrompts = [
   // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   {
     id: 'trans_socrat_01',
+    titleZh: '通用苏格拉底式辅导：不直接给答案',
     title: 'Tuteur socratique universel â€” ne donne pas la rÃ©ponse',
     level: 'B1',
     skill: 'grammaire',
@@ -43,6 +44,7 @@ MÃ©thode :
   },
   {
     id: 'trans_anki_01',
+    titleZh: '从文本生成 Anki 复习卡片',
     title: 'GÃ©nÃ©rer des cartes Anki depuis un texte',
     level: 'A2',
     skill: 'vocabulaire',
@@ -83,6 +85,7 @@ CrÃ©e entre [MIN_CARTES] et [MAX_CARTES] cartes. PrioritÃ© aux items les plu
   },
   {
     id: 'trans_pron_01',
+    titleZh: '发音教练：攻克法语难发音',
     title: 'Coach de prononciation â€” sons difficiles',
     level: 'A2',
     skill: 'prononciation',
@@ -116,6 +119,7 @@ CrÃ©e entre [MIN_CARTES] et [MAX_CARTES] cartes. PrioritÃ© aux items les plu
   },
   {
     id: 'trans_exam_01',
+    titleZh: '模拟法语口试（适用于各级别）',
     title: 'Simuler un entretien oral â€” tous niveaux',
     level: 'B1',
     skill: 'expression_orale',

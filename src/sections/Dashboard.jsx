@@ -193,6 +193,9 @@ export function Dashboard({ onNavigate, settings }) {
                     </span>
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-slate-700 leading-snug">{prompt.title}</p>
+                      {settings.s.showChineseLabels && prompt.titleZh && (
+                        <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">{prompt.titleZh}</p>
+                      )}
                       <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{prompt.objective}</p>
                     </div>
                   </div>

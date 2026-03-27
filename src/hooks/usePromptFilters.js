@@ -46,6 +46,7 @@ function matchesSearch(prompt, search) {
   const query = normalizeSearchValue(search);
   const searchableValues = [
     prompt.title,
+    prompt.titleZh,
     ...(prompt.tags || []),
     prompt.objective,
     prompt.skill,
