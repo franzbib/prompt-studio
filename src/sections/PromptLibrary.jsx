@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   AI_TOOLS,
   CONTEXTS,
@@ -6,6 +6,7 @@ import {
   LEVELS,
   PROMPT_TYPES,
   SKILLS,
+  prompts,
 } from "../data/prompts.js";
 import { LEVEL_ZH_LABELS, SKILL_ZH_LABELS } from "../config/chineseSupport.js";
 import {
@@ -67,6 +68,29 @@ const PEDAGOGICAL_FAMILY_LABELS = {
   simulation_socratique: "Simulation / Socratique",
 };
 
+const LEVEL_ENTRY_COPY = {
+  A1: {
+    label: "Entrer dans les bases",
+    zh: "从法语基础起步",
+  },
+  A2: {
+    label: "Gagner en autonomie",
+    zh: "开始更独立地表达",
+  },
+  B1: {
+    label: "Prendre confiance",
+    zh: "更自信地表达和组织",
+  },
+  B2: {
+    label: "Structurer et nuancer",
+    zh: "让表达更有层次和分寸",
+  },
+  C1: {
+    label: "Affiner et maîtriser",
+    zh: "提升精度与掌控力",
+  },
+};
+
 function formatTypeLabel(type) {
   return type.replaceAll("_", " ");
 }
@@ -75,10 +99,45 @@ function formatRichLabel(labelMap, value) {
   return getRichLabel(labelMap, value);
 }
 
+function hexToRgba(hex, alpha) {
+  if (!hex) {
+    return `rgba(15, 23, 42, ${alpha})`;
+  }
+
+  const normalizedHex = hex.replace("#", "");
+  const hexValue =
+    normalizedHex.length === 3
+      ? normalizedHex
+          .split("")
+          .map((character) => character + character)
+          .join("")
+      : normalizedHex;
+
+  const intValue = Number.parseInt(hexValue, 16);
+  const red = (intValue >> 16) & 255;
+  const green = (intValue >> 8) & 255;
+  const blue = intValue & 255;
+
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+}
+
+function formatPromptCount(count) {
+  return `${count} prompt${count > 1 ? "s" : ""}`;
+}
+
 export function PromptLibrary({ favorites, settings, initialFilters = null }) {
   const filters = usePromptFilters(initialFilters || { level: settings.s.globalLevel || "" });
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const isAdvancedFiltersOpen = showAdvancedFilters || filters.hasAdvancedFilters;
+  const levelCounts = useMemo(
+    () =>
+      prompts.reduce((counts, prompt) => {
+        counts[prompt.level] = (counts[prompt.level] || 0) + 1;
+        return counts;
+      }, {}),
+    [],
+  );
+  const selectedLevelColors = filters.selectedLevel ? LEVEL_COLORS[filters.selectedLevel] : null;
 
   const handleAdvancedFiltersToggle = (event) => {
     if (!filters.hasAdvancedFilters) {
@@ -102,6 +161,134 @@ export function PromptLibrary({ favorites, settings, initialFilters = null }) {
           <p className="text-xs text-slate-400 mt-1">提示库 · 可按等级、活动类型、教学目标和引导程度筛选</p>
         )}
       </div>
+
+      <section
+        className="rounded-[28px] border shadow-sm p-5 mb-5"
+        style={{
+          borderColor: selectedLevelColors
+            ? hexToRgba(selectedLevelColors.accent, 0.22)
+            : "rgba(226, 232, 240, 0.95)",
+          background: selectedLevelColors
+            ? `linear-gradient(135deg, rgba(255,255,255,0.96), ${hexToRgba(selectedLevelColors.light, 0.96)} 55%, rgba(248,250,252,0.94))`
+            : "linear-gradient(135deg, rgba(255,255,255,0.98), rgba(248,250,252,0.96) 58%, rgba(241,245,249,0.92))",
+          boxShadow: selectedLevelColors
+            ? `0 22px 40px -30px ${hexToRgba(selectedLevelColors.accent, 0.45)}`
+            : "0 18px 36px -32px rgba(15, 23, 42, 0.28)",
+        }}
+      >
+        <div className="flex flex-col gap-3 mb-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-2">
+              Choisissez votre niveau
+            </p>
+            <h3 className="text-lg font-semibold text-slate-900 leading-tight">
+              Les niveaux CECRL sont la porte d&apos;entrée principale de la bibliothèque.
+            </h3>
+            <p className="text-sm text-slate-500 mt-1">
+              Commencez par votre niveau, puis affinez avec les filtres pédagogiques.
+            </p>
+            {settings.s.showChineseLabels && (
+              <p className="text-xs text-slate-400 mt-1.5">
+                先选等级，再用活动、目标和引导程度细化筛选。
+              </p>
+            )}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {filters.selectedLevel && (
+              <span
+                className="inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-medium text-slate-700"
+                style={{
+                  backgroundColor: hexToRgba(selectedLevelColors?.light, 0.9),
+                  borderColor: hexToRgba(selectedLevelColors?.accent, 0.22),
+                }}
+              >
+                Niveau actif · {filters.selectedLevel}
+              </span>
+            )}
+            <span className="text-[11px] text-slate-500">
+              Cliquez à nouveau pour revenir à tous les niveaux.
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3">
+          {LEVELS.map((level) => {
+            const colors = LEVEL_COLORS[level];
+            const isActive = filters.selectedLevel === level;
+            const levelCopy = LEVEL_ENTRY_COPY[level];
+
+            return (
+              <button
+                key={level}
+                type="button"
+                aria-pressed={isActive}
+                onClick={() => filters.setSelectedLevel(isActive ? "" : level)}
+                className="group relative overflow-hidden rounded-[24px] border px-4 py-4 text-left transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2"
+                style={{
+                  borderColor: isActive
+                    ? hexToRgba(colors.accent, 0.34)
+                    : hexToRgba(colors.accent, 0.12),
+                  background: isActive
+                    ? `linear-gradient(140deg, rgba(255,255,255,0.98), ${hexToRgba(colors.light, 0.98)} 52%, ${hexToRgba(colors.accent, 0.18)})`
+                    : `linear-gradient(180deg, ${hexToRgba(colors.light, 0.52)}, rgba(255,255,255,0.96))`,
+                  boxShadow: isActive
+                    ? `0 22px 34px -26px ${hexToRgba(colors.accent, 0.6)}`
+                    : `0 18px 28px -28px ${hexToRgba(colors.accent, 0.45)}`,
+                }}
+              >
+                <span
+                  className="absolute inset-x-4 top-0 h-px"
+                  style={{
+                    background: `linear-gradient(90deg, transparent, ${hexToRgba(colors.accent, isActive ? 0.9 : 0.55)}, transparent)`,
+                  }}
+                />
+
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div>
+                    <p
+                      className="text-[11px] uppercase tracking-[0.18em] font-semibold"
+                      style={{ color: isActive ? colors.accent : hexToRgba(colors.accent, 0.82) }}
+                    >
+                      Niveau
+                    </p>
+                    <p className="text-[1.7rem] font-semibold text-slate-900 leading-none mt-2">{level}</p>
+                  </div>
+
+                  <span
+                    className="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium"
+                    style={{
+                      color: colors.accent,
+                      backgroundColor: isActive
+                        ? hexToRgba(colors.accent, 0.14)
+                        : "rgba(255,255,255,0.78)",
+                    }}
+                  >
+                    {settings.s.showChineseLabels ? LEVEL_ZH_LABELS[level] : "CECRL"}
+                  </span>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-slate-800 leading-snug">{levelCopy.label}</p>
+                  {settings.s.showChineseLabels && (
+                    <p className="text-[11px] text-slate-500 leading-snug">{levelCopy.zh}</p>
+                  )}
+                </div>
+
+                <div className="mt-4 flex items-center justify-between gap-3 text-[11px]">
+                  <span className="text-slate-500">{formatPromptCount(levelCounts[level] || 0)}</span>
+                  <span
+                    className="font-medium"
+                    style={{ color: isActive ? colors.accent : "rgb(100 116 139)" }}
+                  >
+                    {isActive ? "Sélectionné" : "Explorer"}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </section>
 
       {settings.s.showChineseLabels && (
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 mb-4">
@@ -132,7 +319,7 @@ export function PromptLibrary({ favorites, settings, initialFilters = null }) {
       <div className="relative mb-4">
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
         <input
-          className="w-full pl-9 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
+          className="w-full pl-9 pr-10 py-3 bg-white border border-slate-200/90 rounded-2xl text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
           placeholder="Rechercher un prompt, une activité, une finalité, un point de grammaire..."
           value={filters.search}
           onChange={(event) => filters.setSearch(event.target.value)}
@@ -163,14 +350,14 @@ export function PromptLibrary({ favorites, settings, initialFilters = null }) {
         </div>
       )}
 
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 mb-4">
+      <div className="bg-white/95 rounded-[24px] border border-slate-100 shadow-sm p-4 mb-4">
         <div className="flex flex-col gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">
-              Filtres principaux
+              Affiner ensuite
             </p>
             <p className="text-[11px] text-slate-500 mb-3">
-              Niveau, activité, finalité et guidage pour trouver vite le bon prompt.
+              Activité, finalité et guidage pour préciser votre sélection sans alourdir l'exploration.
             </p>
             {filters.selectedPedagogicalFamily && !filters.selectedPedagogicalFunction && (
               <div className="mb-3">
@@ -179,22 +366,6 @@ export function PromptLibrary({ favorites, settings, initialFilters = null }) {
                 </span>
               </div>
             )}
-
-            <div className="flex gap-1 flex-wrap mb-3">
-              {LEVELS.map((level) => {
-                const colors = LEVEL_COLORS[level];
-
-                return (
-                  <button
-                    key={level}
-                    onClick={() => filters.setSelectedLevel(filters.selectedLevel === level ? "" : level)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${filters.selectedLevel === level ? `${colors.bg} ${colors.text} ${colors.border}` : "bg-white border-slate-200 text-slate-500 hover:border-slate-300"}`}
-                  >
-                    {settings.s.showChineseLabels ? `${level} · ${LEVEL_ZH_LABELS[level]}` : level}
-                  </button>
-                );
-              })}
-            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
               <select
