@@ -12,13 +12,13 @@ import { HowToPrompt } from "./sections/HowToPrompt.jsx";
 import { Favorites } from "./sections/Favorites.jsx";
 import { Settings } from "./sections/Settings.jsx";
 
-function renderSection(section, { favorites, settings, vocab, onNavigate }) {
+function renderSection(section, { favorites, settings, vocab, onNavigate, libraryInitialFilters }) {
   if (section === "home") {
     return <Dashboard onNavigate={onNavigate} favorites={favorites} settings={settings} />;
   }
 
   if (section === "library") {
-    return <PromptLibrary favorites={favorites} settings={settings} />;
+    return <PromptLibrary favorites={favorites} settings={settings} initialFilters={libraryInitialFilters} />;
   }
 
   if (section === "tools") {
@@ -46,16 +46,25 @@ function renderSection(section, { favorites, settings, vocab, onNavigate }) {
 
 export default function App() {
   const [section, setSection] = useState("home");
+  const [libraryInitialFilters, setLibraryInitialFilters] = useState(null);
   const favorites = useFavorites();
   const settings = useSettings();
   const vocab = useVocab();
+
+  const handleNavigate = (nextSection, options = {}) => {
+    if (nextSection === "library") {
+      setLibraryInitialFilters(options.libraryFilters || null);
+    }
+
+    setSection(nextSection);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
       <AppHeader
         items={NAV_ITEMS}
         currentSection={section}
-        onNavigate={setSection}
+        onNavigate={handleNavigate}
         favoriteCount={favorites.favs.length}
         showChineseLabels={settings.s.showChineseLabels}
       />
@@ -65,14 +74,15 @@ export default function App() {
           favorites,
           settings,
           vocab,
-          onNavigate: setSection,
+          onNavigate: handleNavigate,
+          libraryInitialFilters,
         })}
       </main>
 
       <MobileNav
         items={NAV_ITEMS}
         currentSection={section}
-        onNavigate={setSection}
+        onNavigate={handleNavigate}
         showChineseLabels={settings.s.showChineseLabels}
       />
     </div>

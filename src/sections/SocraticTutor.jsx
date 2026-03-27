@@ -4,7 +4,11 @@ import { PromptCard } from "../components/prompts/PromptCard.jsx";
 
 export function SocraticTutor({ favorites, settings }) {
   const [activeExample, setActiveExample] = useState(null);
-  const socraticPrompts = prompts.filter((prompt) => prompt.type === "socratique");
+  const socraticPrompts = prompts.filter(
+    (prompt) =>
+      prompt.pedagogicalFunction === "socratique" ||
+      prompt.interactionMode === "socratic",
+  );
 
   return (
     <div>

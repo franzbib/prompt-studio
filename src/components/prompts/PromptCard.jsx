@@ -1,6 +1,16 @@
 import { useState } from "react";
 import { LEVEL_COLORS, SKILLS } from "../../data/prompts.js";
 import { LEVEL_ZH_LABELS, SKILL_ZH_LABELS } from "../../config/chineseSupport.js";
+import {
+  getRichLabel,
+  RICH_ACTIVITY_LABELS,
+  RICH_ANTI_SUBSTITUTION_LABELS,
+  RICH_CORRECTION_MODE_LABELS,
+  RICH_GUIDANCE_LEVEL_LABELS,
+  RICH_PEDAGOGICAL_FUNCTION_LABELS,
+  RICH_REWRITE_POLICY_LABELS,
+  RICH_SUPPORT_LANGUAGE_LABELS,
+} from "../../config/richPromptLabels.js";
 import { copyText } from "../../lib/clipboard.js";
 import { DifficultyDots } from "../ui/DifficultyDots.jsx";
 import { LevelBadge } from "../ui/LevelBadge.jsx";
@@ -21,6 +31,38 @@ export function PromptCard({
     label: prompt.skill,
   };
   const skillZhLabel = SKILL_ZH_LABELS[prompt.skill];
+  const activityLabel = getRichLabel(RICH_ACTIVITY_LABELS, prompt.cefrActivityPrimary);
+  const pedagogicalFunctionLabel = getRichLabel(
+    RICH_PEDAGOGICAL_FUNCTION_LABELS,
+    prompt.pedagogicalFunction,
+  );
+  const richDetails = [
+    {
+      key: "guidanceLevel",
+      label: "Guidage",
+      value: getRichLabel(RICH_GUIDANCE_LEVEL_LABELS, prompt.guidanceLevel),
+    },
+    {
+      key: "correctionMode",
+      label: "Correction",
+      value: getRichLabel(RICH_CORRECTION_MODE_LABELS, prompt.correctionMode),
+    },
+    {
+      key: "rewritePolicy",
+      label: "Réécriture",
+      value: getRichLabel(RICH_REWRITE_POLICY_LABELS, prompt.rewritePolicy),
+    },
+    {
+      key: "antiSubstitutionPolicy",
+      label: "Anti-substitution",
+      value: getRichLabel(RICH_ANTI_SUBSTITUTION_LABELS, prompt.antiSubstitutionPolicy),
+    },
+    {
+      key: "supportLanguage",
+      label: "Langue d'appui",
+      value: getRichLabel(RICH_SUPPORT_LANGUAGE_LABELS, prompt.supportLanguage),
+    },
+  ].filter((detail) => detail.value);
 
   return (
     <div
@@ -61,6 +103,15 @@ export function PromptCard({
         )}
         <p className="text-xs text-slate-500 mb-3 line-clamp-2">{prompt.objective}</p>
 
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          <span className="text-[11px] bg-sky-50 text-sky-700 px-2 py-1 rounded-full font-medium">
+            {activityLabel}
+          </span>
+          <span className="text-[11px] bg-emerald-50 text-emerald-700 px-2 py-1 rounded-full font-medium">
+            {pedagogicalFunctionLabel}
+          </span>
+        </div>
+
         {!compact && (
           <div className="flex flex-wrap gap-1 mb-3">
             {prompt.tags.slice(0, 4).map((tag) => (
@@ -94,6 +145,19 @@ export function PromptCard({
 
       {expanded && (
         <div className="border-t border-slate-100 p-4 bg-slate-50">
+          <div className="mb-3">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
+              Repères pédagogiques
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {richDetails.map((detail) => (
+                <div key={detail.key} className="bg-white rounded-xl border border-slate-100 px-3 py-2">
+                  <p className="text-[11px] uppercase tracking-wide text-slate-400 mb-1">{detail.label}</p>
+                  <p className="text-xs text-slate-700 font-medium">{detail.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
             {showChineseLabels ? "Prompt · 提示词" : "Prompt"}
           </p>
